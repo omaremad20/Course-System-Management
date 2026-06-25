@@ -1,0 +1,27 @@
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <header class="w-[98%] md:w-[90%] mx-auto h-16 flex items-center justify-between">
+    <a routerLink="/list" class="text-2xl font-extrabold tracking-[0.2em] uppercase"> CMS </a>
+
+    <ul class="flex items-center gap-3">
+      <li>
+        <a
+          routerLink="/add-course"
+          routerLinkActive="bg-black text-white hover:bg-black/90 hover:text-white/90"
+          class="px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-all duration-200"
+        >
+          Add New Course
+        </a>
+      </li>
+
+      <li>
+        <a
+          routerLink="/list"
+          routerLinkActive="bg-black text-white hover:bg-black/90 hover:text-white/90"
+          class="px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-all duration-200"
+        >
+          Courses
+        </a>
+      </li>
+    </ul>
+  </header>
+</nav>

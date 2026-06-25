@@ -1,0 +1,22 @@
+<div class="flex items-center justify-center min-h-75 p-10">
+  <div
+    class="flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-red-200 bg-red-50 p-12 text-center"
+  >
+    <mat-icon color="warn" class="mb-6 opacity-90 h-16! w-16! text-[64px]!">
+      error_outline
+    </mat-icon>
+
+    <h2 class="mb-3 mt-0 text-2xl font-medium text-red-800">Oops! An Error Occurred</h2>
+
+    <p class="mb-8 text-base leading-relaxed text-red-600">
+      {{ errorMessage }}
+    </p>
+
+    @if (showRetryButton) {
+      <button mat-raised-button color="warn" (click)="onRetry()">
+        <mat-icon>refresh</mat-icon>
+        Try Again
+      </button>
+    }
+  </div>
+</div>

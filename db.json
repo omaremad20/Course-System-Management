@@ -8,7 +8,7 @@
       "duration": 20,
       "price": 500,
       "status": "active",
-      "description": "Learn the fundamentals of Angular including components, services, routing, forms, and HTTP requests through practical projects.",
+      "description": "Learn the fundamentals of Angular including components, services, routing, and forms.",
       "createdDate": "2026-06-10"
     },
     {
@@ -19,8 +19,206 @@
       "duration": 15,
       "price": 400,
       "status": "draft",
-      "description": "Introduction to Node.js covering modules, Express.js, REST APIs, middleware, and basic database integration.",
+      "description": "Introduction to Node.js, Express, REST APIs, and MongoDB.",
       "createdDate": "2026-06-15"
+    },
+    {
+      "id": "3",
+      "courseName": "React Essentials",
+      "instructorName": "Sara Ibrahim",
+      "category": "Frontend",
+      "duration": 18,
+      "price": 550,
+      "status": "active",
+      "description": "Master React fundamentals including hooks and component architecture.",
+      "createdDate": "2026-06-16"
+    },
+    {
+      "id": "4",
+      "courseName": "Vue.js Complete Guide",
+      "instructorName": "Omar Adel",
+      "category": "Frontend",
+      "duration": 17,
+      "price": 450,
+      "status": "active",
+      "description": "Build modern web applications using Vue.js.",
+      "createdDate": "2026-06-17"
+    },
+    {
+      "id": "5",
+      "courseName": "ASP.NET Core API",
+      "instructorName": "Mohamed Samir",
+      "category": "Backend",
+      "duration": 22,
+      "price": 650,
+      "status": "draft",
+      "description": "Develop scalable REST APIs with ASP.NET Core.",
+      "createdDate": "2026-06-18"
+    },
+    {
+      "id": "6",
+      "courseName": "Python for Beginners",
+      "instructorName": "Nour Ahmed",
+      "category": "Programming",
+      "duration": 16,
+      "price": 350,
+      "status": "active",
+      "description": "Start programming with Python from scratch.",
+      "createdDate": "2026-06-19"
+    },
+    {
+      "id": "7",
+      "courseName": "Java Programming",
+      "instructorName": "Mostafa Ali",
+      "category": "Programming",
+      "duration": 24,
+      "price": 700,
+      "status": "archived",
+      "description": "Comprehensive Java programming course.",
+      "createdDate": "2026-06-20"
+    },
+    {
+      "id": "8",
+      "courseName": "Laravel Fundamentals",
+      "instructorName": "Khaled Mahmoud",
+      "category": "Backend",
+      "duration": 21,
+      "price": 600,
+      "status": "active",
+      "description": "Build robust web applications using Laravel.",
+      "createdDate": "2026-06-21"
+    },
+    {
+      "id": "9",
+      "courseName": "Flutter Development",
+      "instructorName": "Mariam Hassan",
+      "category": "Mobile",
+      "duration": 25,
+      "price": 750,
+      "status": "active",
+      "description": "Create cross-platform mobile applications with Flutter.",
+      "createdDate": "2026-06-22"
+    },
+    {
+      "id": "10",
+      "courseName": "Kotlin for Android",
+      "instructorName": "Ahmed Yasser",
+      "category": "Mobile",
+      "duration": 20,
+      "price": 650,
+      "status": "draft",
+      "description": "Develop Android apps using Kotlin.",
+      "createdDate": "2026-06-23"
+    },
+    {
+      "id": "11",
+      "courseName": "SQL Masterclass",
+      "instructorName": "Salma Atef",
+      "category": "Database",
+      "duration": 14,
+      "price": 300,
+      "status": "active",
+      "description": "Learn SQL queries, joins, indexes, and optimization.",
+      "createdDate": "2026-06-24"
+    },
+    {
+      "id": "12",
+      "courseName": "MongoDB Essentials",
+      "instructorName": "Hossam Fathy",
+      "category": "Database",
+      "duration": 13,
+      "price": 320,
+      "status": "active",
+      "description": "Learn MongoDB collections, queries, and aggregation.",
+      "createdDate": "2026-06-25"
+    },
+    {
+      "id": "13",
+      "courseName": "Docker Fundamentals",
+      "instructorName": "Mahmoud Adel",
+      "category": "DevOps",
+      "duration": 12,
+      "price": 450,
+      "status": "active",
+      "description": "Containerize applications using Docker.",
+      "createdDate": "2026-06-26"
+    },
+    {
+      "id": "14",
+      "courseName": "Kubernetes Basics",
+      "instructorName": "Youssef Tarek",
+      "category": "DevOps",
+      "duration": 19,
+      "price": 700,
+      "status": "draft",
+      "description": "Deploy and manage applications with Kubernetes.",
+      "createdDate": "2026-06-27"
+    },
+    {
+      "id": "15",
+      "courseName": "Git & GitHub",
+      "instructorName": "Amr Salah",
+      "category": "Tools",
+      "duration": 8,
+      "price": 200,
+      "status": "active",
+      "description": "Version control and collaboration using Git and GitHub.",
+      "createdDate": "2026-06-28"
+    },
+    {
+      "id": "16",
+      "courseName": "UI/UX Design Basics",
+      "instructorName": "Aya Mostafa",
+      "category": "Design",
+      "duration": 18,
+      "price": 500,
+      "status": "archived",
+      "description": "Learn UI principles and UX best practices.",
+      "createdDate": "2026-06-29"
+    },
+    {
+      "id": "17",
+      "courseName": "Tailwind CSS",
+      "instructorName": "Ahmed Emad",
+      "category": "Frontend",
+      "duration": 10,
+      "price": 250,
+      "status": "active",
+      "description": "Build modern responsive interfaces using Tailwind CSS.",
+      "createdDate": "2026-06-30"
+    },
+    {
+      "id": "18",
+      "courseName": "TypeScript Advanced",
+      "instructorName": "Mohamed Khaled",
+      "category": "Programming",
+      "duration": 15,
+      "price": 480,
+      "status": "draft",
+      "description": "Advanced TypeScript concepts and best practices.",
+      "createdDate": "2026-07-01"
+    },
+    {
+      "id": "19",
+      "courseName": "C# Fundamentals",
+      "instructorName": "Eman Wael",
+      "category": "Programming",
+      "duration": 20,
+      "price": 550,
+      "status": "active",
+      "description": "Learn object-oriented programming using C#.",
+      "createdDate": "2026-07-02"
+    },
+    {
+      "id": "20",
+      "courseName": "AWS Cloud Essentials",
+      "instructorName": "Karim Nabil",
+      "category": "Cloud",
+      "duration": 23,
+      "price": 850,
+      "status": "active",
+      "description": "Introduction to AWS cloud services and deployment.",
+      "createdDate": "2026-07-03"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

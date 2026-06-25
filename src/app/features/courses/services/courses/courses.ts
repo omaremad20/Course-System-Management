@@ -7,7 +7,7 @@ import { ICourse } from '../../models/ICourse';
 @Injectable({ providedIn: 'root' })
 export class CoursesService {
   private http = inject(HttpClient);
-  private readonly URL = environment.DEV_API_URL_BACKEND;
+  private readonly URL = environment.PROD_API_URL_BACKEND;
 
   fetchCourses(paramsObj: {
     page: number;

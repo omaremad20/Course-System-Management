@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "mock-api": "json-server --watch db.json",
     "serve:ssr:Course-System-Management": "node dist/Course-System-Management/server/server.mjs"
   },
   "private": true,
@@ -23,6 +24,7 @@
     "@angular/router": "^22.0.0",
     "@angular/ssr": "^22.0.4",
     "express": "^5.1.0",
+    "json-server": "^1.0.0-beta.15",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

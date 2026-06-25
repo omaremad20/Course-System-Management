@@ -1,6 +1,9 @@
 {
   "name": "course-system-management",
   "version": "0.0.0",
+  "imports": {
+    "#app.css": "./src/css/app.css"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

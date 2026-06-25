@@ -1,1 +1,139 @@
-<p>course-details works!</p>
+@if (course && fetchCourseDetailsStatus === 'success') {
+  <div class="max-w-5xl mx-auto p-6 md:p-10">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div class="flex items-center gap-3">
+        <button mat-icon-button routerLink="/list" class="text-gray-600">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">{{
+            course.category
+          }}</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mt-0.5">
+            {{ course.courseName }}
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:self-center self-end">
+        <button mat-stroked-button [routerLink]="['/edit-course', course.id]">
+          <mat-icon>edit</mat-icon> Edit Course
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-0">Course Description</h2>
+          <p class="text-gray-600 leading-relaxed text-base whitespace-pre-line m-0">
+            {{ course.description || 'Sorry, No description provided for this course.' }}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div
+            class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4"
+          >
+            <div class="p-3 rounded-lg bg-indigo-50 text-indigo-600">
+              <mat-icon class="block!">person</mat-icon>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 font-medium uppercase m-0">Instructor</p>
+              <p class="text-base font-semibold text-gray-800 m-0 mt-0.5">
+                {{ course.instructorName }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4"
+          >
+            <div class="p-3 rounded-lg bg-emerald-50 text-emerald-600">
+              <mat-icon class="block!">calendar_today</mat-icon>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 font-medium uppercase m-0">Created On</p>
+              <p class="text-base font-semibold text-gray-800 m-0 mt-0.5">
+                {{ course.createdDate | date: 'mediumDate' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div
+            class="px-6 py-3 flex items-center justify-between border-b border-gray-100 bg-gray-50/70"
+          >
+            <span class="text-sm font-medium text-gray-500">Course Status</span>
+            <span
+              class="base"
+              [class.active-pill]="course.status === 'active'"
+              [class.arch-pill]="course.status === 'archived'"
+              [class.draft-pill]="course.status === 'draft'"
+            >
+              {{ course.status }}
+            </span>
+          </div>
+
+          <div class="p-6 md:p-8 text-center border-b border-gray-100">
+            <p class="text-sm text-gray-400 uppercase font-medium tracking-wide m-0">
+              Course Investment
+            </p>
+            <h3 class="text-4xl font-extrabold text-gray-900 my-2">${{ course.price }}</h3>
+          </div>
+
+          <div class="divide-y divide-gray-100 px-6">
+            <div class="py-4 flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 text-gray-500">
+                <mat-icon class="text-gray-400! text-lg! h-5! w-5!">schedule</mat-icon>
+                <span>Duration</span>
+              </div>
+              <span class="font-semibold text-gray-800">{{ course.duration }} Hours</span>
+            </div>
+
+            <div class="py-4 flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 text-gray-500">
+                <mat-icon class="text-gray-400! text-lg! h-5! w-5!">bookmark_border</mat-icon>
+                <span>Track</span>
+              </div>
+              <span class="font-semibold text-gray-800">{{ course.category }}</span>
+            </div>
+
+            <div class="py-4 flex items-center justify-between text-sm">
+              <div class="flex items-center gap-2 text-gray-500">
+                <mat-icon class="text-gray-400! text-lg! h-5! w-5!">fingerprint</mat-icon>
+                <span>Course ID</span>
+              </div>
+              <span class="font-mono text-xs text-gray-400">#{{ course.id }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (fetchCourseDetailsStatus === 'loading') {
+  <app-course-details-skeleton></app-course-details-skeleton>
+}
+
+@if (fetchCourseDetailsStatus === 'not-found') {
+  <div class="overflow-x-auto w-full h-full flex flex-col justify-center">
+    <app-error-state
+      [showRetryButton]="false"
+      errorMessage="We couldn't find this course. It may have been deleted, the link may be invalid."
+    ></app-error-state>
+  </div>
+}
+
+@if (fetchCourseDetailsStatus === 'error') {
+  <div class="overflow-x-auto w-full h-full flex flex-col justify-center">
+    <app-error-state
+      (retry)="fetchCourseDetails()"
+      errorMessage="We couldn't find this course. It may have been deleted, the link may be invalid."
+    ></app-error-state>
+  </div>
+}

@@ -1,1 +1,155 @@
-<p>course-form working!</p>
+<main class="max-w-3xl mx-auto my-8 px-4" aria-label="Course form page">
+  <header class="mb-6">
+    <h1 class="text-2xl font-semibold text-(--mat-sys-on-surface)">
+      {{ isEditMode ? 'Edit Course' : 'Add New Course' }}
+    </h1>
+    <p class="text-sm text-(--mat-sys-on-surface-variant) mt-1">
+      {{
+        isEditMode
+          ? 'Update the details below and save your changes.'
+          : 'Fill in the details below to add a new course.'
+      }}
+    </p>
+  </header>
+
+  @if (fetchStatus === 'error') {
+    <section
+      class="rounded-lg border border-(--mat-sys-error) bg-(--mat-sys-error-container) p-6 text-center space-y-3"
+      aria-label="Error loading course"
+    >
+      <p class="text-(--mat-sys-on-error-container) font-medium">
+        Something went wrong while loading the course.
+      </p>
+      <button
+        matButton="outlined"
+        type="button"
+        title="Try loading the course again"
+        aria-label="Retry loading course"
+        (click)="loadCourse()"
+      >
+        Try Again
+      </button>
+    </section>
+  }
+
+  @if (fetchStatus === 'not-found') {
+    <section
+      class="rounded-lg border border-(--mat-sys-outline) bg-(--mat-sys-surface-variant) p-8 text-center space-y-4"
+      aria-label="Course not found"
+    >
+      <h2 class="text-xl font-semibold">Course Not Found</h2>
+
+      <p class="text-(--mat-sys-on-surface-variant)">
+        No course was found with ID:
+        <code class="font-mono">{{ courseId }}</code
+        >. The course <br />
+        may have been deleted or never existed.
+      </p>
+
+      <a aria-label="Courses" title="Courses" mat-flat-button color="primary" routerLink="/list"
+        >Back to Courses</a
+      >
+    </section>
+  }
+
+  @if (fetchStatus === 'loading') {
+    <app-form-skeleton />
+  }
+
+  @if (fetchStatus === 'idle' || fetchStatus === 'success') {
+    <section
+      class="rounded-lg border border-(--mat-sys-outline-variant) bg-(--mat-sys-surface) shadow-sm p-6"
+    >
+      <form
+        #formRef="ngForm"
+        [formGroup]="courseForm"
+        (ngSubmit)="handleForm(formRef)"
+        novalidate
+        aria-label="Course details form"
+      >
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <app-form-field
+            label="Course Name"
+            [control]="f['courseName']"
+            [matcher]="matcher"
+            placeholder="e.g. Angular Fundamentals"
+          />
+
+          <app-form-field
+            label="Instructor Name"
+            [control]="f['instructorName']"
+            [matcher]="matcher"
+            placeholder="e.g. Ahmed Ali"
+          />
+
+          <app-form-field
+            label="Category"
+            [control]="f['category']"
+            [matcher]="matcher"
+            placeholder="e.g. Frontend"
+          />
+
+          <app-form-field
+            label="Duration (hours)"
+            [control]="f['duration']"
+            [matcher]="matcher"
+            type="number"
+            placeholder="e.g. 20"
+          />
+
+          <app-form-field
+            label="Price (EGP)"
+            [control]="f['price']"
+            [matcher]="matcher"
+            type="number"
+            placeholder="e.g. 1500"
+          />
+
+          <app-form-field
+            label="Status"
+            [control]="f['status']"
+            [matcher]="matcher"
+            type="select"
+            [options]="statusOptions"
+          />
+
+          <div class="md:col-span-2">
+            <app-form-field
+              label="Description (optional)"
+              [control]="f['description']"
+              [matcher]="matcher"
+              type="textarea"
+              placeholder="What will students learn in this course?"
+            />
+          </div>
+        </div>
+
+        <div class="flex gap-3 mt-4 flex-wrap">
+          <button
+            matButton="filled"
+            type="submit"
+            [disabled]="formStatus === 'loading'"
+            [attr.aria-label]="isEditMode ? 'Save course changes' : 'Create new course'"
+            [title]="isEditMode ? 'Save changes' : 'Create course'"
+          >
+            @if (formStatus === 'loading') {
+              <mat-spinner diameter="18" aria-label="Saving..." />
+            } @else {
+              {{ isEditMode ? 'Save Changes' : 'Create Course' }}
+            }
+          </button>
+
+          <button
+            matButton="outlined"
+            type="button"
+            [attr.aria-label]="isEditMode ? 'Revert changes to original values' : 'Clear form'"
+            [title]="isEditMode ? 'Revert changes' : 'Clear form'"
+            (click)="handleReset(formRef)"
+          >
+            {{ isEditMode ? 'Revert Changes' : 'Clear Form' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+</main>

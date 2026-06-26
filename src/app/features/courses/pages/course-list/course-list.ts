@@ -19,6 +19,7 @@ import { CoursesService } from '../../services/courses/courses';
 import { DeleteCourseAction } from '../../services/courses/deleteCourseAction/delete-course-action';
 import { CourseCard } from '../../components/course-card/course-card';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CourseCardSkeleton } from '../../components/course-card-skeleton/course-card-skeleton';
 
 type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!courses' | null;
 
@@ -39,6 +40,7 @@ type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!c
     EmptyCoursesState,
     GenericTable,
     CourseCard,
+    CourseCardSkeleton,
   ],
   templateUrl: './course-list.html',
   styleUrl: './course-list.css',

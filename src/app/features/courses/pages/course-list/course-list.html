@@ -44,18 +44,24 @@
   </div>
 
   @if (fetchCoursesStatus() === 'loading') {
-    <app-table-skeleton
-      [columns]="[
-        'Course Name',
-        'Instructor',
-        'Category',
-        'Duration',
-        'Price',
-        'Status',
-        'Actions',
-      ]"
-      [limit]="pageSize"
-    />
+    @if (isMobile()) {
+      <div class="grid grid-cols-1 gap-4">
+        <app-course-card-skeleton [limit]="pageSize" />
+      </div>
+    } @else {
+      <app-table-skeleton
+        [columns]="[
+          'Course Name',
+          'Instructor',
+          'Category',
+          'Duration',
+          'Price',
+          'Status',
+          'Actions',
+        ]"
+        [limit]="pageSize"
+      />
+    }
   } @else if (fetchCoursesStatus() === 'success-!courses') {
     <app-empty-courses-state
       [hasActiveFilters]="!!(filtersForm.value.search || filtersForm.value.status)"

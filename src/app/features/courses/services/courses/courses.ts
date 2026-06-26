@@ -17,7 +17,7 @@ export class CoursesService {
     sort?: string;
     order?: 'asc' | 'desc';
   }): Observable<{ data: ICourse[]; totalCount: number }> {
-    let params = new HttpParams().set('_page', paramsObj.page).set('_per_page', paramsObj.limit);
+    let params = new HttpParams().set('_page', paramsObj.page).set('_limit', paramsObj.limit);
 
     if (paramsObj.search) params = params.set('courseName_like', paramsObj.search);
     if (paramsObj.status) params = params.set('status', paramsObj.status);

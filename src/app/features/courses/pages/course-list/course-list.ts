@@ -114,7 +114,6 @@ export class CourseList implements OnInit, OnDestroy {
   }
 
   getCourses() {
-    console.log('calling')
     this.courses.set([]);
     this.fetchCoursesStatus.set('loading');
 
@@ -132,18 +131,31 @@ export class CourseList implements OnInit, OnDestroy {
     };
     const { field, order } = sortMap[sort ?? 'newest'] ?? sortMap['newest'];
 
-    this._Router.navigate([], {
-      relativeTo: this._ActivatedRoute,
-      queryParams: {
-        search: search || null,
-        status: status || null,
-        sort: sort || null,
-        page: this.currentPage,
-        limit: this.pageSize,
-      },
-      queryParamsHandling: 'merge',
-      replaceUrl: true,
-    });
+    const newQueryParams: any = {
+      search: search || null,
+      status: status || null,
+      sort: sort || null,
+      page: this.currentPage,
+      limit: this.pageSize,
+    };
+
+    const currentQp = this._ActivatedRoute.snapshot.queryParams;
+
+    const needsNavigate =
+      (currentQp['search'] || null) !== newQueryParams.search ||
+      (currentQp['status'] || null) !== newQueryParams.status ||
+      (currentQp['sort'] || 'newest') !== (newQueryParams.sort || 'newest') ||
+      String(currentQp['page'] || 1) !== String(newQueryParams.page) ||
+      String(currentQp['limit'] || 5) !== String(newQueryParams.limit);
+
+    if (needsNavigate) {
+      this._Router.navigate([], {
+        relativeTo: this._ActivatedRoute,
+        queryParams: newQueryParams,
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    }
 
     this.cancelFetchCourses = this._CoursesService
       .fetchCourses({

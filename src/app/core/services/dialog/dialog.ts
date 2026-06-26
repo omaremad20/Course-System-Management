@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, Service } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import {
@@ -6,7 +6,7 @@ import {
   ConfirmDialogData,
 } from '../../../shared/components/confirm-dialog/confirm-dialog';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class DialogService {
   private dialog = inject(MatDialog);
 

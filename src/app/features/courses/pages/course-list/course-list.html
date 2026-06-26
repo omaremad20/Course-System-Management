@@ -1,4 +1,4 @@
-<div class="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+<div class="py-6 mx-auto space-y-6">
   <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm space-y-4">
     <div class="flex items-center justify-between">
       <h1 class="text-xl md:text-2xl font-bold text-gray-900 m-0">CMS Dashboard</h1>
@@ -46,7 +46,7 @@
     </form>
   </div>
 
-  @if (fetchCoursesStatus === 'loading') {
+  @if (fetchCoursesStatus() === 'loading') {
     <app-table-skeleton
       [columns]="[
         'Course Name',
@@ -59,25 +59,19 @@
       ]"
       [limit]="pageSize"
     />
-  }
-
-  @if (fetchCoursesStatus === 'success-!courses') {
+  } @else if (fetchCoursesStatus() === 'success-!courses') {
     <app-empty-courses-state
       [hasActiveFilters]="!!(filtersForm.value.search || filtersForm.value.status)"
     />
-  }
-
-  @if (fetchCoursesStatus === 'error') {
+  } @else if (fetchCoursesStatus() === 'error') {
     <app-error-state
       errorMessage="We couldn't load the course list. Please check your connection."
       (retry)="getCourses()"
     />
-  }
-
-  @if (fetchCoursesStatus === 'success-courses') {
+  } @else if (fetchCoursesStatus() === 'success-courses') {
     <div class="space-y-4">
       <app-generic-table
-        [dataSource]="courses"
+        [dataSource]="courses()"
         [displayedColumns]="displayedColumns"
         (view)="handleView($event)"
         (edit)="handleEdit($event)"

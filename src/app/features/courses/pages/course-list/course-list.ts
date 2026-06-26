@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,7 +9,8 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
-
+import { DialogService } from '../../../../core/services/dialog/dialog';
+import { SnackbarService } from '../../../../core/services/snackbar/snackbar';
 import { ErrorState } from '../../../../shared/components/error-state/error-state';
 import { GenericTable } from '../../../../shared/components/generic-table/generic-table';
 import { TableSkeleton } from '../../../../shared/components/table-skeleton/table-skeleton';
@@ -41,11 +42,15 @@ type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!c
   styleUrl: './course-list.css',
 })
 export class CourseList implements OnInit, OnDestroy {
-  private _CoursesService = inject(CoursesService);
-  private _Router = inject(Router);
-  private _ActivatedRoute = inject(ActivatedRoute);
-  private _ChangeDetectorRef = inject(ChangeDetectorRef);
+  private readonly _CoursesService = inject(CoursesService);
+  private readonly _Router = inject(Router);
+  private readonly _ActivatedRoute = inject(ActivatedRoute);
+  private readonly _SnackbarService = inject(SnackbarService);
+  private readonly _DialogService = inject(DialogService);
   private cancelFetchCourses!: Subscription;
+  private cancelDeleteCourse!: Subscription;
+  private cancelConfirmModal!: Subscription;
+  private cancelFilterFormValueChanges!: Subscription;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -57,8 +62,9 @@ export class CourseList implements OnInit, OnDestroy {
     },
     { updateOn: 'change' },
   );
-  courses: ICourse[] = [];
-  fetchCoursesStatus: IFetchCoursesStatus = null;
+
+  courses = signal<ICourse[]>([]);
+  fetchCoursesStatus = signal<IFetchCoursesStatus>(null);
 
   displayedColumns = [
     'courseName',
@@ -76,29 +82,41 @@ export class CourseList implements OnInit, OnDestroy {
 
   ngOnInit() {
     const qp = this._ActivatedRoute.snapshot.queryParams;
-    this.filtersForm.patchValue({
-      search: qp['search'] || '',
-      status: qp['status'] || '',
-      sort: qp['sort'] || 'newest',
-    });
+    this.filtersForm.patchValue(
+      {
+        search: qp['search'] || '',
+        status: qp['status'] || '',
+        sort: qp['sort'] || 'newest',
+      },
+      { emitEvent: false },
+    );
+
     this.currentPage = Number(qp['page']) || 1;
     this.pageSize = Number(qp['limit']) || 5;
 
     this.getCourses();
 
-    this.filtersForm.valueChanges
+    const initialFormValue = JSON.stringify(this.filtersForm.value);
+
+    this.cancelFilterFormValueChanges = this.filtersForm.valueChanges
       .pipe(
         debounceTime(300),
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       )
-      .subscribe(() => {
+      .subscribe((currentValue) => {
+        if (JSON.stringify(currentValue) === initialFormValue) {
+          return;
+        }
+
         this.currentPage = 1;
         this.getCourses();
       });
   }
 
   getCourses() {
-    this.fetchCoursesStatus = 'loading';
+    this.courses.set([]);
+    this.fetchCoursesStatus.set('loading');
+
     this.cancelFetchCourses?.unsubscribe();
 
     const { search, status, sort } = this.filtersForm.value;
@@ -123,6 +141,7 @@ export class CourseList implements OnInit, OnDestroy {
         limit: this.pageSize,
       },
       queryParamsHandling: 'merge',
+      replaceUrl: true,
     });
 
     this.cancelFetchCourses = this._CoursesService
@@ -136,14 +155,14 @@ export class CourseList implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (res) => {
-          this.courses = res.data;
+          this.courses.set(res.data);
           this.totalCourses = res.totalCount;
-          this.fetchCoursesStatus = this.courses.length ? 'success-courses' : 'success-!courses';
-          this._ChangeDetectorRef.detectChanges();
+          this.fetchCoursesStatus.set(
+            this.courses().length ? 'success-courses' : 'success-!courses',
+          );
         },
         error: () => {
-          this.fetchCoursesStatus = 'error';
-          this._ChangeDetectorRef.detectChanges();
+          this.fetchCoursesStatus.set('error');
         },
       });
   }
@@ -157,16 +176,38 @@ export class CourseList implements OnInit, OnDestroy {
   handleView(id: string) {
     this._Router.navigate(['/course-details', id]);
   }
+
   handleEdit(id: string) {
     this._Router.navigate(['/edit-course', id]);
   }
+
   handleDelete(id: string) {
-    if (confirm('Are you sure you want to delete this course?')) {
-      this._CoursesService.deleteCourse(id).subscribe(() => this.getCourses());
-    }
+    this.cancelConfirmModal = this._DialogService
+      .confirm({
+        title: 'Delete Course',
+        message: 'Are you sure you want to delete this course? This action cannot be undone.',
+        confirmLabel: 'Delete',
+        confirmColor: 'warn',
+      })
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+
+        this.cancelDeleteCourse = this._CoursesService.deleteCourse(id).subscribe({
+          next: () => {
+            this._SnackbarService.success('Course deleted successfully.');
+            this.getCourses();
+          },
+          error: () => {
+            this._SnackbarService.error('Failed to delete course.');
+          },
+        });
+      });
   }
 
   ngOnDestroy() {
     this.cancelFetchCourses?.unsubscribe();
+    this.cancelDeleteCourse?.unsubscribe();
+    this.cancelConfirmModal?.unsubscribe();
+    this.cancelFilterFormValueChanges?.unsubscribe();
   }
 }

@@ -2,6 +2,7 @@
 
 @import 'tailwindcss';
 
+/* Courses Status In Table */
 .base {
   @apply px-2.5 py-0.5 rounded-full text-xs font-semibold border capitalize;
 }
@@ -16,4 +17,14 @@
 
 .arch-pill {
   @apply bg-gray-100 text-gray-800 border-gray-200;
+}
+
+/* Snackbar  */
+.snack-success .mdc-snackbar__surface {
+  background-color: #166534 !important;
+  color: #fff !important;
+}
+.snack-error .mdc-snackbar__surface {
+  background-color: #991b1b !important;
+  color: #fff !important;
 }

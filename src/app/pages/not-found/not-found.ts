@@ -2,11 +2,10 @@ import { Location } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-not-found',
-  imports: [MatIconModule, RouterLink, MatButtonModule],
+  imports: [MatIconModule, MatButtonModule],
   templateUrl: './not-found.html',
   styleUrl: './not-found.css',
 })

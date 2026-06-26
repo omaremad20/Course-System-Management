@@ -1,0 +1,104 @@
+<div class="overflow-x-auto w-full rounded-xl border border-gray-100 shadow-sm bg-white">
+  <table mat-table [dataSource]="dataSource" class="w-full">
+    @for (column of displayedColumns; track column) {
+      @if (column === 'actions') {
+        <ng-container matColumnDef="actions">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-gray-50 text-gray-500 font-medium text-sm py-4"
+          >
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let row" class="py-3">
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="text-gray-500">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="view.emit(row.id)">
+                <mat-icon class="text-gray-500">visibility</mat-icon>
+                <span>View</span>
+              </button>
+              <button mat-menu-item (click)="edit.emit(row.id)">
+                <mat-icon class="text-gray-500">edit</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button mat-menu-item (click)="delete.emit(row.id)" class="text-red-600">
+                <mat-icon class="text-red-500">delete</mat-icon>
+                <span class="text-red-600">Delete</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+      } @else if (column === 'status') {
+        <ng-container matColumnDef="status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-gray-50 text-gray-500 font-medium text-sm py-4"
+          >
+            Status
+          </th>
+          <td mat-cell *matCellDef="let row" class="py-3">
+            <span
+              [ngClass]="{
+                'bg-green-50 text-green-700 border-green-200': row.status === 'active',
+                'bg-amber-50 text-amber-700 border-amber-200': row.status === 'draft',
+                'bg-gray-50 text-gray-600 border-gray-200': row.status === 'archived',
+              }"
+              class="px-2.5 py-1 rounded-full text-xs font-semibold border capitalize inline-block"
+            >
+              {{ row.status }}
+            </span>
+          </td>
+        </ng-container>
+      } @else if (column === 'price') {
+        <ng-container matColumnDef="price">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-gray-50 text-gray-500 font-medium text-sm py-4"
+          >
+            Price
+          </th>
+          <td mat-cell *matCellDef="let row" class="py-3 font-medium text-gray-900">
+            ${{ row.price }}
+          </td>
+        </ng-container>
+      } @else if (column === 'duration') {
+        <ng-container matColumnDef="duration">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-gray-50 text-gray-500 font-medium text-sm py-4"
+          >
+            Duration
+          </th>
+          <td mat-cell *matCellDef="let row" class="py-3 text-gray-600">
+            {{ row.duration }} Hours
+          </td>
+        </ng-container>
+      } @else {
+        <ng-container [matColumnDef]="column">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="bg-gray-50 text-gray-500 font-medium text-sm py-4 capitalize"
+          >
+            {{ column.replace('Name', ' Name') }}
+          </th>
+          <td mat-cell *matCellDef="let row" class="py-3 text-gray-700 font-normal">
+            {{ row[column] }}
+          </td>
+        </ng-container>
+      }
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="border-b border-gray-100"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="hover:bg-gray-50/50 border-b border-gray-100 transition-colors"
+    ></tr>
+  </table>
+</div>

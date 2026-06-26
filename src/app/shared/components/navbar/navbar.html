@@ -1,25 +1,32 @@
-<nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-  <header class="w-[90%] mx-auto h-16 flex items-center justify-between">
-    <a routerLink="/list" class="text-2xl font-extrabold tracking-widest uppercase"> CMS </a>
+<nav class="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur">
+  <header class="mx-auto flex h-16 w-[90%] items-center justify-between">
+    <a
+      routerLink="/list"
+      class="text-2xl font-bold tracking-wide text-slate-900 transition-colors hover:text-blue-600"
+    >
+      CMS
+    </a>
 
-    <ul class="flex items-center gap-3">
+    <ul class="flex items-center gap-2">
       <li>
         <a
-          routerLink="/add-course"
-          routerLinkActive="bg-black text-white hover:bg-black/90 hover:text-white/90"
-          class="px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-all duration-200"
+          routerLink="/list"
+          routerLinkActive="text-slate-900"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-gray-100 hover:text-slate-900"
         >
-          Add New Course
+          Courses
         </a>
       </li>
 
       <li>
         <a
-          routerLink="/list"
-          routerLinkActive="bg-black text-white hover:bg-black/90 hover:text-white/90"
-          class="px-4 py-2 rounded-full text-sm font-medium tracking-wider transition-all duration-200"
+          routerLink="/add-course"
+          routerLinkActive="bg-blue-800!"
+          class="inline-flex items-center gap-2 rounded-lg bg-blue-700! px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-blue-800!"
         >
-          Courses
+          <mat-icon class="h-5! w-5! text-[20px]!">add</mat-icon>
+          <span>Add Course</span>
         </a>
       </li>
     </ul>

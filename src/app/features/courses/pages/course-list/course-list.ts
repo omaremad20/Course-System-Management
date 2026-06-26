@@ -14,9 +14,9 @@ import { GenericTable } from '../../../../shared/components/generic-table/generi
 import { TableSkeleton } from '../../../../shared/components/table-skeleton/table-skeleton';
 import { EmptyCoursesState } from '../../components/empty-courses-state/empty-courses-state';
 import { ICourse } from '../../models/ICourse';
+import { IMinCourse } from '../../models/IMinCourse';
 import { CoursesService } from '../../services/courses/courses';
 import { DeleteCourseAction } from '../../services/courses/deleteCourseAction/delete-course-action';
-import { IMinCourse } from '../../models/IMinCourse';
 
 type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!courses' | null;
 
@@ -26,7 +26,6 @@ type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!c
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     MatIconModule,
     MatButtonModule,
     MatSelectModule,

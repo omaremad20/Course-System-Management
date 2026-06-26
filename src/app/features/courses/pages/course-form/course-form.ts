@@ -1,12 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -22,14 +14,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { SnackbarService } from '../../../../core/services/snackbar/snackbar';
 import { FormField } from '../../../../shared/components/form-field/form-field';
 import { FormSkeletonComponent } from '../../../../shared/components/form-skeleton/form-skeleton';
 import { ICourse } from '../../models/ICourse';
 import { CoursesService } from '../../services/courses/courses';
+import { DialogService } from '../../../../core/services/dialog/dialog';
 
 class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -59,9 +51,9 @@ export class CourseForm implements OnInit, OnDestroy {
   private readonly _ActivatedRoute = inject(ActivatedRoute);
   private readonly _Router = inject(Router);
   private readonly _CoursesService = inject(CoursesService);
-  private readonly _MatSnackBar = inject(MatSnackBar);
-  private readonly _PLATFORM_ID = inject(PLATFORM_ID);
   private readonly _ChangeDetectorRef = inject(ChangeDetectorRef);
+  private readonly _SnackbarService = inject(SnackbarService);
+  private readonly _DialogService = inject(DialogService);
 
   @ViewChild('formRef') formRef!: FormGroupDirective;
 
@@ -146,7 +138,7 @@ export class CourseForm implements OnInit, OnDestroy {
     if (this.courseForm.invalid) {
       this.courseForm.markAllAsTouched();
       this.formStatus = 'error';
-      this.toast('Please fill in all required fields.');
+      this._SnackbarService.error('Please fill in all required fields.');
       return;
     }
 
@@ -155,12 +147,12 @@ export class CourseForm implements OnInit, OnDestroy {
     this.cancelHandleCreate = this._CoursesService.createNewCourse(payload).subscribe({
       next: (res) => {
         this.formStatus = 'success';
-        this.toast('Course created successfully!', res.id);
+        this._SnackbarService.success('Course deleted successfully.');
         formRef.resetForm();
       },
       error: () => {
         this.formStatus = 'error';
-        this.toast('Failed to create course. Please try again.');
+        this._SnackbarService.error('Failed to create course. Please try again.');
       },
     });
   }
@@ -171,31 +163,47 @@ export class CourseForm implements OnInit, OnDestroy {
     if (this.courseForm.invalid) {
       this.courseForm.markAllAsTouched();
       this.formStatus = 'error';
-      this.toast('Please fill in all required fields.');
+      this._SnackbarService.error('Please fill in all required fields.');
       return;
     }
 
     if (!this.courseForm.dirty) {
       this.formStatus = null;
-      this.toast('No changes to save.');
+      this._SnackbarService.error('No changes to save.');
       return;
     }
 
-    const payload = this.trimmedValues();
+    this._DialogService
+      .confirm({
+        title: 'Save Changes?',
+        message: 'Are you sure you want to update this course?',
+        confirmLabel: 'Save',
+        confirmColor: 'primary',
+      })
+      .subscribe((confirmed) => {
+        if (!confirmed) {
+          this.formStatus = null;
+          return;
+        }
 
-    this.cancelHandleUpdate = this._CoursesService.updateCourse(payload, this.courseId!).subscribe({
-      next: () => {
-        this.formStatus = 'success';
+        const payload = this.trimmedValues();
 
-        this.originalValues = { ...payload };
-        this.courseForm.markAsPristine();
-        this.toast('Course updated successfully!');
-      },
-      error: () => {
-        this.formStatus = 'error';
-        this.toast('Failed to update course. Please try again.');
-      },
-    });
+        this.cancelHandleUpdate = this._CoursesService
+          .updateCourse(payload, this.courseId!)
+          .subscribe({
+            next: () => {
+              this.formStatus = 'success';
+              this.originalValues = { ...payload };
+              this.courseForm.markAsPristine();
+              this._SnackbarService.success('Course updated successfully!');
+              this._Router.navigate(['/course-details', this.courseId]);
+            },
+            error: () => {
+              this.formStatus = 'error';
+              this._SnackbarService.error('Failed to update course. Please try again.');
+            },
+          });
+      });
   }
 
   handleReset(formRef: any) {
@@ -215,24 +223,6 @@ export class CourseForm implements OnInit, OnDestroy {
       trimmed[key] = typeof val === 'string' ? val.trim() : val;
     }
     return trimmed as ICourse;
-  }
-
-  private toast(message: string, courseId?: string) {
-    const action = courseId ? 'View' : undefined;
-
-    const ref = this._MatSnackBar.open(message, action, {
-      duration: 3000,
-      horizontalPosition: window.innerWidth < 768 ? 'center' : 'right',
-      verticalPosition: 'bottom',
-    });
-
-    if (isPlatformBrowser(this._PLATFORM_ID)) {
-      if (courseId) {
-        ref.onAction().subscribe(() => {
-          this._Router.navigate(['/course-details', courseId]);
-        });
-      }
-    }
   }
 
   ngOnDestroy(): void {

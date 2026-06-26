@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
+import { IMinCourse } from '../../../features/courses/models/IMinCourse';
 
 @Component({
   selector: 'app-generic-table',
@@ -18,7 +19,7 @@ export class GenericTable implements OnChanges {
 
   @Output() view   = new EventEmitter<string>();
   @Output() edit   = new EventEmitter<string>();
-  @Output() delete = new EventEmitter<string>();
+  @Output() delete = new EventEmitter<IMinCourse>();
 
   ngOnChanges() {
     if (Array.isArray(this.dataSource)) {

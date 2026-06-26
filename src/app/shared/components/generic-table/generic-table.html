@@ -23,7 +23,11 @@
                 <mat-icon class="text-gray-500">edit</mat-icon>
                 <span>Edit</span>
               </button>
-              <button mat-menu-item (click)="delete.emit(row.id)" class="text-red-600">
+              <button
+                mat-menu-item
+                (click)="delete.emit({ id: row.id, courseName: row.courseName })"
+                class="text-red-600"
+              >
                 <mat-icon class="text-red-500">delete</mat-icon>
                 <span class="text-red-600">Delete</span>
               </button>

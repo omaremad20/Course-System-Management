@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-form-skeleton',
   templateUrl: './form-skeleton.html',
 })
-export class FormSkeletonComponent {
+export class FormSkeleton {
   fields = ['half', 'half', 'half', 'half', 'half', 'half', 'full'];
 }

@@ -17,6 +17,8 @@ import { ICourse } from '../../models/ICourse';
 import { IMinCourse } from '../../models/IMinCourse';
 import { CoursesService } from '../../services/courses/courses';
 import { DeleteCourseAction } from '../../services/courses/deleteCourseAction/delete-course-action';
+import { CourseCard } from '../../components/course-card/course-card';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!courses' | null;
 
@@ -36,6 +38,7 @@ type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!c
     TableSkeleton,
     EmptyCoursesState,
     GenericTable,
+    CourseCard,
   ],
   templateUrl: './course-list.html',
   styleUrl: './course-list.css',
@@ -44,12 +47,16 @@ export class CourseList implements OnInit, OnDestroy {
   private readonly _CoursesService = inject(CoursesService);
   private readonly _Router = inject(Router);
   private readonly _ActivatedRoute = inject(ActivatedRoute);
-  readonly _DeleteCourseAction = inject(DeleteCourseAction);
+  private readonly _BreakpointObserver = inject(BreakpointObserver);
 
+  readonly _DeleteCourseAction = inject(DeleteCourseAction);
   private cancelFetchCourses!: Subscription;
   private cancelDeleteCourse!: Subscription;
   private cancelConfirmModal!: Subscription;
   private cancelFilterFormValueChanges!: Subscription;
+
+  isMobile = signal<boolean>(false);
+  private cancelBreakpoint!: Subscription;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -80,6 +87,12 @@ export class CourseList implements OnInit, OnDestroy {
   currentPage = 1;
 
   ngOnInit() {
+    this.cancelBreakpoint = this._BreakpointObserver
+      .observe(['(max-width: 768px)'])
+      .subscribe((result) => {
+        this.isMobile.set(result.matches);
+      });
+
     const qp = this._ActivatedRoute.snapshot.queryParams;
     this.filtersForm.patchValue(
       {
@@ -94,8 +107,6 @@ export class CourseList implements OnInit, OnDestroy {
     this.pageSize = Number(qp['limit']) || 5;
 
     this.getCourses();
-
-    const initialFormValue = JSON.stringify(this.filtersForm.value);
 
     this.cancelFilterFormValueChanges = this.filtersForm.valueChanges
       .pipe(
@@ -198,6 +209,7 @@ export class CourseList implements OnInit, OnDestroy {
     this.cancelFetchCourses?.unsubscribe();
     this.cancelDeleteCourse?.unsubscribe();
     this.cancelConfirmModal?.unsubscribe();
+    this.cancelBreakpoint?.unsubscribe();
     this.cancelFilterFormValueChanges?.unsubscribe();
   }
 }

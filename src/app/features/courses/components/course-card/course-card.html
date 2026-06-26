@@ -1,0 +1,60 @@
+<div
+  class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition-shadow"
+>
+  <div class="flex justify-between items-start mb-3">
+    <div>
+      <h3 class="text-lg font-bold text-gray-900 m-0">{{ course.courseName }}</h3>
+      <p class="text-sm text-gray-500 m-0">{{ course.instructorName }}</p>
+    </div>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="text-gray-500 -mr-2 -mt-2">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="view.emit(course.id)">
+        <mat-icon class="text-gray-500">visibility</mat-icon>
+        <span>View</span>
+      </button>
+      <button mat-menu-item (click)="edit.emit(course.id)">
+        <mat-icon class="text-gray-500">edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button
+        mat-menu-item
+        (click)="delete.emit({ id: course.id, courseName: course.courseName })"
+        class="text-red-600"
+      >
+        <mat-icon class="text-red-500">delete</mat-icon>
+        <span class="text-red-600">Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <div class="grid grid-cols-2 gap-y-2 text-sm mb-4">
+    <div class="text-gray-600">
+      <span class="block text-xs text-gray-400">Category</span>
+      {{ course.category }}
+    </div>
+    <div class="text-gray-600">
+      <span class="block text-xs text-gray-400">Duration</span>
+      {{ course.duration }} Hours
+    </div>
+    <div class="text-gray-600">
+      <span class="block text-xs text-gray-400">Price</span>
+      <span class="font-medium text-gray-900">${{ course.price }}</span>
+    </div>
+  </div>
+
+  <div class="pt-3 border-t border-gray-50 flex justify-between items-center">
+    <span
+      [ngClass]="{
+        'bg-green-50 text-green-700 border-green-200': course.status === 'active',
+        'bg-amber-50 text-amber-700 border-amber-200': course.status === 'draft',
+        'bg-gray-50 text-gray-600 border-gray-200': course.status === 'archived',
+      }"
+      class="px-2.5 py-1 rounded-full text-xs font-semibold border capitalize"
+    >
+      {{ course.status }}
+    </span>
+  </div>
+</div>

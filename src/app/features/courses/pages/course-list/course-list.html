@@ -67,13 +67,26 @@
     />
   } @else if (fetchCoursesStatus() === 'success-courses') {
     <div class="space-y-4">
-      <app-generic-table
-        [dataSource]="courses()"
-        [displayedColumns]="displayedColumns"
-        (view)="handleView($event)"
-        (edit)="handleEdit($event)"
-        (delete)="onDeleteCourse($event)"
-      />
+      @if (isMobile()) {
+        <div class="grid grid-cols-1 gap-4">
+          @for (course of courses(); track course.id) {
+            <app-course-card
+              [course]="course"
+              (view)="handleView($event)"
+              (edit)="handleEdit($event)"
+              (delete)="onDeleteCourse($event)"
+            />
+          }
+        </div>
+      } @else {
+        <app-generic-table
+          [dataSource]="courses()"
+          [displayedColumns]="displayedColumns"
+          (view)="handleView($event)"
+          (edit)="handleEdit($event)"
+          (delete)="onDeleteCourse($event)"
+        />
+      }
 
       <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <mat-paginator

@@ -21,7 +21,6 @@ export class GenericTable implements OnChanges {
   @Output() delete = new EventEmitter<string>();
 
   ngOnChanges() {
-    // بنتأكد إنه array قبل الـ spread
     if (Array.isArray(this.dataSource)) {
       this.dataSource = [...this.dataSource];
     } else {

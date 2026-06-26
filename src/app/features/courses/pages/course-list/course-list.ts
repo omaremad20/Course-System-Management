@@ -9,14 +9,14 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
-import { DialogService } from '../../../../core/services/dialog/dialog';
-import { SnackbarService } from '../../../../core/services/snackbar/snackbar';
 import { ErrorState } from '../../../../shared/components/error-state/error-state';
 import { GenericTable } from '../../../../shared/components/generic-table/generic-table';
 import { TableSkeleton } from '../../../../shared/components/table-skeleton/table-skeleton';
 import { EmptyCoursesState } from '../../components/empty-courses-state/empty-courses-state';
 import { ICourse } from '../../models/ICourse';
 import { CoursesService } from '../../services/courses/courses';
+import { DeleteCourseAction } from '../../services/courses/deleteCourseAction/delete-course-action';
+import { IMinCourse } from '../../models/IMinCourse';
 
 type IFetchCoursesStatus = 'loading' | 'error' | 'success-courses' | 'success-!courses' | null;
 
@@ -45,8 +45,8 @@ export class CourseList implements OnInit, OnDestroy {
   private readonly _CoursesService = inject(CoursesService);
   private readonly _Router = inject(Router);
   private readonly _ActivatedRoute = inject(ActivatedRoute);
-  private readonly _SnackbarService = inject(SnackbarService);
-  private readonly _DialogService = inject(DialogService);
+  readonly _DeleteCourseAction = inject(DeleteCourseAction);
+
   private cancelFetchCourses!: Subscription;
   private cancelDeleteCourse!: Subscription;
   private cancelConfirmModal!: Subscription;
@@ -114,6 +114,7 @@ export class CourseList implements OnInit, OnDestroy {
   }
 
   getCourses() {
+    console.log('calling')
     this.courses.set([]);
     this.fetchCoursesStatus.set('loading');
 
@@ -181,29 +182,11 @@ export class CourseList implements OnInit, OnDestroy {
     this._Router.navigate(['/edit-course', id]);
   }
 
-  handleDelete(id: string) {
-    this.cancelConfirmModal = this._DialogService
-      .confirm({
-        title: 'Delete Course',
-        message: 'Are you sure you want to delete this course? This action cannot be undone.',
-        confirmLabel: 'Delete',
-        confirmColor: 'warn',
-      })
-      .subscribe((confirmed) => {
-        if (!confirmed) return;
-
-        this.cancelDeleteCourse = this._CoursesService.deleteCourse(id).subscribe({
-          next: () => {
-            this._SnackbarService.success('Course deleted successfully.');
-            this.getCourses();
-          },
-          error: () => {
-            this._SnackbarService.error('Failed to delete course.');
-          },
-        });
-      });
+  onDeleteCourse(course: IMinCourse) {
+    this._DeleteCourseAction.handleDelete(course, () => {
+      this.getCourses();
+    });
   }
-
   ngOnDestroy() {
     this.cancelFetchCourses?.unsubscribe();
     this.cancelDeleteCourse?.unsubscribe();

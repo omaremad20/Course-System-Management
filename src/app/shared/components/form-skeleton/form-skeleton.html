@@ -1,12 +1,46 @@
-<div class="grid grid-cols-1 gap-4 md:grid-cols-2" aria-busy="true" aria-label="Loading form">
-  @for (item of fields; track item) {
-    <div
-      class="h-14 rounded-md animate-pulse bg-(--mat-sys-surface-variant)"
-      [class.md:col-span-2]="item === 'full'"
-    ></div>
-  }
-  <div class="md:col-span-2 flex gap-3 mt-2">
-    <div class="h-10 w-24 rounded-md animate-pulse bg-(--mat-sys-surface-variant)"></div>
-    <div class="h-10 w-24 rounded-md animate-pulse bg-(--mat-sys-surface-variant)"></div>
-  </div>
+<div class="my-4 px-0 md:px-4 animate-pulse">
+  <section class="rounded-lg border border-gray-200 bg-white shadow-sm p-6">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <!-- Course Name -->
+      <div class="space-y-2">
+        <div class="h-4 w-28 rounded bg-gray-300"></div>
+        <div class="h-14 rounded-md bg-gray-200"></div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="h-4 w-32 rounded bg-gray-300"></div>
+        <div class="h-14 rounded-md bg-gray-200"></div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="h-4 w-24 rounded bg-gray-300"></div>
+        <div class="h-14 rounded-md bg-gray-200"></div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="h-4 w-36 rounded bg-gray-300"></div>
+        <div class="h-14 rounded-md bg-gray-200"></div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="h-4 w-24 rounded bg-gray-300"></div>
+        <div class="h-14 rounded-md bg-gray-200"></div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="h-4 w-20 rounded bg-gray-300"></div>
+        <div class="h-14 rounded-md bg-gray-200"></div>
+      </div>
+
+      <div class="space-y-2 md:col-span-2">
+        <div class="h-4 w-40 rounded bg-gray-300"></div>
+        <div class="h-32 rounded-md bg-gray-200"></div>
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-6 flex-wrap">
+      <div class="h-10 w-36 rounded-full bg-gray-300"></div>
+      <div class="h-10 w-32 rounded-full bg-gray-200"></div>
+    </div>
+  </section>
 </div>

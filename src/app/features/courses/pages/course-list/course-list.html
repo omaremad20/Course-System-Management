@@ -1,1 +1,99 @@
-<p>course-list working!</p>
+<div class="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+  <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm space-y-4">
+    <div class="flex items-center justify-between">
+      <h1 class="text-xl md:text-2xl font-bold text-gray-900 m-0">CMS Dashboard</h1>
+      <button mat-raised-button color="primary" routerLink="/add-course" class="rounded-lg!">
+        <mat-icon>add</mat-icon> Add Course
+      </button>
+    </div>
+
+    <form
+      [formGroup]="filtersForm"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center"
+    >
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Search</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          formControlName="search"
+          type="text"
+          placeholder="Search by course name..."
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Filter by Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="">All Statuses</mat-option>
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="draft">Draft</mat-option>
+          <mat-option value="archived">Archived</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full lg:col-span-2">
+        <mat-label>Sort By</mat-label>
+        <mat-select formControlName="sort">
+          <mat-option value="newest">Newest First</mat-option>
+          <mat-option value="oldest">Oldest First</mat-option>
+          <mat-option value="price-low">Price: Low to High</mat-option>
+          <mat-option value="price-high">Price: High to Low</mat-option>
+          <mat-option value="duration-low">Duration: Low to High</mat-option>
+          <mat-option value="duration-high">Duration: High to Low</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+
+  @if (fetchCoursesStatus === 'loading') {
+    <app-table-skeleton
+      [columns]="[
+        'Course Name',
+        'Instructor',
+        'Category',
+        'Duration',
+        'Price',
+        'Status',
+        'Actions',
+      ]"
+      [limit]="pageSize"
+    />
+  }
+
+  @if (fetchCoursesStatus === 'success-!courses') {
+    <app-empty-courses-state
+      [hasActiveFilters]="!!(filtersForm.value.search || filtersForm.value.status)"
+    />
+  }
+
+  @if (fetchCoursesStatus === 'error') {
+    <app-error-state
+      errorMessage="We couldn't load the course list. Please check your connection."
+      (retry)="getCourses()"
+    />
+  }
+
+  @if (fetchCoursesStatus === 'success-courses') {
+    <div class="space-y-4">
+      <app-generic-table
+        [dataSource]="courses"
+        [displayedColumns]="displayedColumns"
+        (view)="handleView($event)"
+        (edit)="handleEdit($event)"
+        (delete)="handleDelete($event)"
+      />
+
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <mat-paginator
+          [length]="totalCourses"
+          [pageSize]="pageSize"
+          [pageIndex]="currentPage - 1"
+          [pageSizeOptions]="[5, 10, 20]"
+          (page)="onPageChange($event)"
+          aria-label="Select page of courses"
+        />
+      </div>
+    </div>
+  }
+</div>

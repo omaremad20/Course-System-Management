@@ -133,7 +133,7 @@ export class CourseForm implements OnInit, OnDestroy {
     this.formStatus = 'loading';
 
     this.f['id'].setValue(crypto.randomUUID());
-    this.f['createdDate'].setValue(new Date().toISOString());
+    this.f['createdDate'].setValue(new Date().toISOString().split('T')[0]);
 
     if (this.courseForm.invalid) {
       this.courseForm.markAllAsTouched();

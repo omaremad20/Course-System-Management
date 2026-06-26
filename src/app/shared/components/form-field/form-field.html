@@ -1,0 +1,42 @@
+<mat-form-field class="w-full">
+  <mat-label>{{ label() }}</mat-label>
+
+  @if (type() === 'select') {
+    <mat-select
+      [formControl]="control()"
+      [errorStateMatcher]="matcher()"
+      [attr.aria-label]="label()"
+      [attr.title]="label()"
+    >
+      @for (opt of options(); track opt.value) {
+        <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+      }
+    </mat-select>
+  } @else if (type() === 'textarea') {
+    <textarea
+      matInput
+      [formControl]="control()"
+      [errorStateMatcher]="matcher()"
+      [placeholder]="placeholder()"
+      [attr.aria-label]="label()"
+      [attr.title]="label()"
+      rows="4"
+      class="resize-none"
+    ></textarea>
+  } @else {
+    <input
+      matInput
+      [type]="type()"
+      [formControl]="control()"
+      [errorStateMatcher]="matcher()"
+      [placeholder]="placeholder()"
+      [attr.aria-label]="label()"
+      [attr.title]="label()"
+      (input)="onInput($event)"
+    />
+  }
+
+  @if (control().invalid && control().touched) {
+    <mat-error>{{ errorMessage() }}</mat-error>
+  }
+</mat-form-field>

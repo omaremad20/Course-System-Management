@@ -173,6 +173,12 @@ The mock backend is built with **JSON Server** and deployed on **Railway**, so i
 https://course-system-management-backend-production.up.railway.app
 ```
 
+### Backend repo
+
+```
+https://github.com/omaremad20/Course-Management-Dashboard-Backend.git
+```
+
 ### API Endpoints
 
 | Method | Endpoint | Action |

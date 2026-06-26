@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../../../enviroments/enviroment';
 import { ICourse } from '../../models/ICourse';
 
@@ -25,11 +25,21 @@ export class CoursesService {
       params = params.set('_sort', `${paramsObj.order === 'desc' ? '-' : ''}${paramsObj.sort}`);
     }
 
-    return this.http.get<any>(`${this.URL}/courses`, { params }).pipe(
-      map((res) => ({
-        data: res.data ?? [],
-        totalCount: res.items ?? 0,
-      })),
+    return this.http.get<any>(`${this.URL}/courses`, { params, observe: 'response' }).pipe(
+      map((res) => {
+        const body = res.body;
+
+        if (body && !Array.isArray(body) && body.data) {
+          return { data: body.data, totalCount: body.items ?? 0 };
+        }
+
+        if (Array.isArray(body)) {
+          const total = Number(res.headers.get('X-Total-Count')) || body.length;
+          return { data: body, totalCount: total };
+        }
+
+        return { data: [], totalCount: 0 };
+      }),
     );
   }
 

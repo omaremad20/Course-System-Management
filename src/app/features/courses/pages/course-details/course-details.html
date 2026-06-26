@@ -20,7 +20,11 @@
           <mat-icon>edit</mat-icon> Edit Course
         </button>
 
-        <button mat-flat-button class="bg-red-500!" (click)="onDeleteCourse({id: course.id, courseName:course.courseName})">
+        <button
+          mat-flat-button
+          class="bg-red-500!"
+          (click)="onDeleteCourse({ id: course.id, courseName: course.courseName })"
+        >
           <mat-icon>delete</mat-icon> Delete Course
         </button>
       </div>
@@ -118,22 +122,16 @@
       </div>
     </div>
   </div>
-}
-
-@if (fetchCourseDetailsStatus === 'loading') {
+} @else if (fetchCourseDetailsStatus === 'loading') {
   <app-course-details-skeleton></app-course-details-skeleton>
-}
-
-@if (fetchCourseDetailsStatus === 'not-found') {
+} @else if (fetchCourseDetailsStatus === 'not-found') {
   <div class="overflow-x-auto w-full h-full flex flex-col justify-center">
     <app-error-state
       [showRetryButton]="false"
       errorMessage="We couldn't find this course. It may have been deleted, the link may be invalid."
     ></app-error-state>
   </div>
-}
-
-@if (fetchCourseDetailsStatus === 'error') {
+} @else if (fetchCourseDetailsStatus === 'error') {
   <div class="overflow-x-auto w-full h-full flex flex-col justify-center">
     <app-error-state
       (retry)="fetchCourseDetails()"

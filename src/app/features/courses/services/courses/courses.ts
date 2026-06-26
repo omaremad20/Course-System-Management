@@ -21,8 +21,11 @@ export class CoursesService {
 
     if (paramsObj.search) params = params.set('courseName_like', paramsObj.search);
     if (paramsObj.status) params = params.set('status', paramsObj.status);
-    if (paramsObj.sort && paramsObj.order) {
-      params = params.set('_sort', `${paramsObj.order === 'desc' ? '-' : ''}${paramsObj.sort}`);
+    if (paramsObj.sort) {
+      params = params.set('_sort', paramsObj.sort);
+    }
+    if (paramsObj.order) {
+      params = params.set('_order', paramsObj.order);
     }
 
     return this.http.get<any>(`${this.URL}/courses`, { params, observe: 'response' }).pipe(

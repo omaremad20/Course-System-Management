@@ -103,11 +103,7 @@ export class CourseList implements OnInit, OnDestroy {
         debounceTime(300),
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
       )
-      .subscribe((currentValue) => {
-        if (JSON.stringify(currentValue) === initialFormValue) {
-          return;
-        }
-
+      .subscribe(() => {
         this.currentPage = 1;
         this.getCourses();
       });

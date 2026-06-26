@@ -233,7 +233,7 @@ The local server runs at `http://localhost:3000`.
 
 ![Course Details](./public/course-details-page.jpeg)
 
-![Confirm Delete](./public/confirm-delete-course-Modal.jpeg)
+![Confirm Delete](./public/confirm-delete-course-modal.jpeg)
 
 ---
 

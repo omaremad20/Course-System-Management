@@ -18,7 +18,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SnackbarService } from '../../../../core/services/snackbar/snackbar';
 import { FormField } from '../../../../shared/components/form-field/form-field';
-import { FormSkeletonComponent } from '../../../../shared/components/form-skeleton/form-skeleton';
+import { FormSkeleton } from '../../../../shared/components/form-skeleton/form-skeleton';
 import { ICourse } from '../../models/ICourse';
 import { CoursesService } from '../../services/courses/courses';
 import { DialogService } from '../../../../core/services/dialog/dialog';
@@ -42,7 +42,7 @@ class MyErrorStateMatcher implements ErrorStateMatcher {
     MatProgressSpinnerModule,
     RouterLink,
     FormField,
-    FormSkeletonComponent,
+    FormSkeleton,
   ],
   templateUrl: './course-form.html',
   styleUrl: './course-form.css',
@@ -97,7 +97,6 @@ export class CourseForm implements OnInit, OnDestroy {
     this.courseId = this._ActivatedRoute.snapshot.paramMap.get('courseId');
     if (this.courseId) {
       this.isEditMode = true;
-      console.log(this.fetchStatus);
       this.loadCourse();
     }
   }
@@ -115,7 +114,6 @@ export class CourseForm implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.fetchStatus = err.status === 404 ? 'not-found' : 'error';
-          console.log(this.fetchStatus);
           this._ChangeDetectorRef.detectChanges();
         },
       });
@@ -153,6 +151,7 @@ export class CourseForm implements OnInit, OnDestroy {
       error: () => {
         this.formStatus = 'error';
         this._SnackbarService.error('Failed to create course. Please try again.');
+        this._ChangeDetectorRef.detectChanges();
       },
     });
   }
@@ -183,6 +182,7 @@ export class CourseForm implements OnInit, OnDestroy {
       .subscribe((confirmed) => {
         if (!confirmed) {
           this.formStatus = null;
+          this._ChangeDetectorRef.detectChanges();
           return;
         }
 
@@ -201,6 +201,7 @@ export class CourseForm implements OnInit, OnDestroy {
             error: () => {
               this.formStatus = 'error';
               this._SnackbarService.error('Failed to update course. Please try again.');
+              this._ChangeDetectorRef.detectChanges();
             },
           });
       });

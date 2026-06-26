@@ -20,7 +20,7 @@ A modern Course Management Dashboard built with Angular, designed for managing e
 
 - ✅ Confirmation modal before deletion
 - ✅ Toast / Snackbar notifications for actions (add, edit, delete)
-- ✅ Loading skeletons (table skeleton + form skeleton + details skeleton)
+- ✅ Loading skeletons (table skeleton + form skeleton + details skeleton + course card skeleton)
 - ✅ Empty state component when no courses exist
 - ✅ Error state component for failed API requests
 - ✅ Route guard (`form-exit`) to warn before leaving unsaved form
@@ -95,6 +95,12 @@ A modern Course Management Dashboard built with Angular, designed for managing e
     │   │       │   │       course-card.html
     │   │       │   │       course-card.spec.ts
     │   │       │   │       course-card.ts
+    │   │       │   │
+    │   │       │   ├───course-card-skeleton
+    │   │       │   │       course-card-skeleton.css
+    │   │       │   │       course-card-skeleton.html
+    │   │       │   │       course-card-skeleton.spec.ts
+    │   │       │   │       course-card-skeleton.ts
     │   │       │   │
     │   │       │   ├───course-details-skeleton
     │   │       │   │       course-details-skeleton.css
